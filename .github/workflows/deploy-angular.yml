@@ -12,4 +12,9 @@ jobs:
               echo "Configurando o git com sucesso"
       - name: "Configurando o user no git"
         run: |
-          echo "Configurando o git user.name"        
+          echo "Configurando o git user.name" 
+  construir:
+    runs-on: ubuntu-24
+    steps:
+      - name: "Instalar as dependencias"
+        run: echo 'Instalando as dependencias'               
