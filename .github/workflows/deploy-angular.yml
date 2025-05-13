@@ -43,6 +43,7 @@ jobs:
         run: |
           git config --global user.name "Sammadar dos Santos"
           git config --global user.email "sammadar@outlook.com.br"
+          npm install --global angular-cli-ghpages
       - name: Deploy to GitHub Pages
         run: npx angular-cli-ghpages --dir=dist/escola-ng/browser --no-silent
         env:
