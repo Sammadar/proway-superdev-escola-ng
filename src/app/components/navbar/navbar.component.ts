@@ -14,10 +14,11 @@ import { Ripple } from 'primeng/ripple';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
+
 export class NavbarComponent {
   items: MenuItem[];
 
-  constructor(private router: Router){
+  constructor(private router: Router) {
     this.items = [
       {
         label: 'Home',
@@ -28,12 +29,16 @@ export class NavbarComponent {
         label: 'Cursos',
         icon: 'pi pi-graduation-cap',
         command: () => this.navegar("/cursos")
+      },
+      {
+        label: 'Alunos',
+        icon: 'pi pi-user',
+        command: () => this.navegar("/alunos")
       }
     ]
   }
 
-  private navegar(caminho: string){
-    this.router.navigate([caminho]);
-
-  }
+ private navegar(caminho: string){
+  this.router.navigate([caminho]);
+ }
 }
