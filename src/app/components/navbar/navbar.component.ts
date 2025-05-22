@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Route, Router } from '@angular/router';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
@@ -12,9 +12,8 @@ import { Ripple } from 'primeng/ripple';
   selector: 'app-navbar',
   imports: [Menubar, BadgeModule, AvatarModule, InputTextModule, Ripple, CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.css'
+  styleUrl: './navbar.component.css',
 })
-
 export class NavbarComponent {
   items: MenuItem[];
 
@@ -34,11 +33,11 @@ export class NavbarComponent {
         label: 'Alunos',
         icon: 'pi pi-user',
         command: () => this.navegar("/alunos")
-      }
+      },
     ]
   }
 
- private navegar(caminho: string){
-  this.router.navigate([caminho]);
- }
+  private navegar(caminho: string){
+    this.router.navigate([caminho]);
+  }
 }
