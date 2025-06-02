@@ -14,3 +14,6 @@ export class FormatarCpfPipe implements PipeTransform {
           "-" + cpf.substring(9, 11);
   }
 }
+// abrir terminal na pasta pipe
+// ng g pipe formatar-cpf
+// copiar código
