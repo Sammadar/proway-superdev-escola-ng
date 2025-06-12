@@ -12,6 +12,11 @@ import { ToastModule } from 'primeng/toast';
 import { Curso } from '../../../models/curso';
 import { Matricula, MatriculaCadastrar } from '../../../models/matricula';
 import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { AlunoSelect } from '../../../models/aluno';
+import { SelectModule } from 'primeng/select';
+import { AlunoService } from '../../../services/aluno.service';
+import { MatriculaService } from '../../../services/matricula.service';
 
 @Component({
   selector: 'app-curso-editar',
@@ -23,6 +28,9 @@ import { TableModule } from 'primeng/table';
     ButtonModule,
     ToastModule,
     TableModule,
+    DialogModule,
+    SelectModule,
+    
   ],
   providers: [MessageService],
   templateUrl: './curso-editar.component.html',
@@ -33,9 +41,12 @@ export class CursoEditarComponent {
   idEditar: number;
   matriculaCadastrar: MatriculaCadastrar;
   modalCadastrarVisible: boolean;
-  matriculas: Matricula [];
+  matriculas: Matricula[];
+  alunos: AlunoSelect[];
 
   constructor(
+    private matriculaService: MatriculaService,
+    private alunoService: AlunoService,
     private cursoService: CursoService,
     private messageService: MessageService,
     private router: Router,
@@ -47,16 +58,19 @@ export class CursoEditarComponent {
     this.matriculaCadastrar = new MatriculaCadastrar();
     this.modalCadastrarVisible = false;
     this.matriculas = [];
+    this.alunos = [];
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.cursoService.obterPorId(this.idEditar).subscribe({
       next: curso => this.preencherCamposParaEditar(curso),
       error: erro => console.log("Ocorreu ao carregar os dados do curso:" + erro),
     });
+
+    this.carregarMatriculas();
   }
 
-  private preencherCamposParaEditar(curso: Curso){
+  private preencherCamposParaEditar(curso: Curso) {
     this.curso.nome = curso.nome;
     this.curso.sigla = curso.sigla;
   }
@@ -73,7 +87,38 @@ export class CursoEditarComponent {
     this.router.navigate(["/cursos"]);
   }
 
-  abrirModalRegistrarMatricula(){
-    
+  abrirModalRegistrarMatricula() {
+    this.carregarAlunos();
+    this.modalCadastrarVisible = true;
+
+  }
+
+  matricular(){
+
+  }
+
+  private carregarAlunos(){
+    this.alunoService.obterTodos().subscribe({
+      next: alunos => this.alunos = alunos.map(aluno => new AlunoSelect(
+        `${aluno.nome} ${aluno.sobrenome} - ${aluno.cpf}`, aluno.id!
+      )).sort((a,b) => a.nomeCompleto.localeCompare(b.nomeCompleto)),
+      error: erro => this.apresentarMensagemErroCarregarAlunos(erro)
+    })
+  }
+  apresentarMensagemErroCarregarAlunos(error: any){
+    this.messageService.add({detail: "Erro ao carregar os alunos", severity: "error"});
+    console.error(error)
+  }
+
+  carregarMatriculas(){
+    this.matriculaService.obterTodos(this.idEditar).subscribe({
+      next: matriculas => this.matriculas = matriculas,
+      error: erro => this.apresentarMensagemErroCarregarMatriculas(erro)
+    })
+  }
+
+  apresentarMensagemErroCarregarMatriculas(error: any) {
+    this.messageService.add({detail: "Erro ao carregar as matriculas", severity: "error"});
+    console.error(error);
   }
 }
